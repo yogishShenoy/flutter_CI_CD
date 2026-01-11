@@ -1,0 +1,45 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Build Flutter App
+
+on:
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: "Select build flavor"
+        required: true
+        type: environment
+
+jobs:
+  build:
+    runs-on: macos-latest
+    environment: ${{ github.event.inputs.flavor }}
+    env: 
+      # MY_APP_ID: ${{ vars.APP_ID }}
+      # MY_API_KEY: ${{ secrets.API_KEY }}
+      FLAVOR: ${{ github.event.inputs.flavor }}
+      APP_NAME: ${{ vars.APP_NAME }}
+      # BUILD_NUMBER: ${{ github.event.inputs.build_number }}
+      # ENABLE_OBFUSCATION: ${{ github.event.inputs.enable_obfuscation }}
+ 
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: pubspec.yaml
+      - name: Check Flutter version
+        run: |
+          flutter --version
+          dart --version
+          flutter doctor -v
+      - name: Install dependencies
+        run: flutter pub get
+      # - name: Analyze project source
+      #   run: dart analyze
+      # - run: flutter build apk
+      # - run: flutter build appbundle
