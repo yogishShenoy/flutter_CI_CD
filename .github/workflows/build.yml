@@ -27,7 +27,7 @@ jobs:
  
     steps:
       - name: build values
-        run: echo 'Flavor is $FLAVOR, APP_NAME is $APP_NAME'
+        run: echo "Flavor is $FLAVOR, APP_NAME is $APP_NAME"
 
       - name: Clone repository
         uses: actions/checkout@v4
