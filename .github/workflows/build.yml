@@ -48,5 +48,6 @@ jobs:
 
       # - name: Analyze project source
       #   run: dart analyze
-      # - run: flutter build apk
+      - name: Build APK
+        run: flutter build apk
       # - run: flutter build appbundle
