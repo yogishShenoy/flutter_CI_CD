@@ -57,8 +57,8 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = propOrEnv("APPLICATION_ID") ?: "com.example.learn01"
-        logConfig("APPLICATION_ID", applicationId)
+        applicationId = propOrEnv("ANDROID_APP_ID") ?: "com.example.learn01"
+        logConfig("ANDROID_APP_ID", applicationId)
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -69,12 +69,9 @@ android {
         logConfig("APP_VERSION_NAME", versionName)
         multiDexEnabled = true
 
-        val appName = propOrEnv("APP_NAME")
-        logConfig("APP_NAME", appName)
-        addResValueIfNotEmpty(this, "app_name", appName)
-
-
-
+        val appDisplayName = propOrEnv("APP_DISPLAY_NAME")
+        logConfig("APP_DISPLAY_NAME", appDisplayName)
+        addResValueIfNotEmpty(this, "app_name", appDisplayName)
     }
 
     buildTypes {

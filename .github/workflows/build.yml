@@ -21,14 +21,14 @@ jobs:
       # MY_APP_ID: ${{ vars.APP_ID }}
       # MY_API_KEY: ${{ secrets.API_KEY }}
       FLAVOR: ${{ github.event.inputs.flavor }}
-      APP_NAME: ${{ vars.APP_NAME }}
-      APPLICATION_ID: ${{ vars.APPLICATION_ID }}
+      APP_DISPLAY_NAME: ${{ vars.APP_DISPLAY_NAME }}
+      ANDROID_APP_ID: ${{ vars.ANDROID_APP_ID }}
       # BUILD_NUMBER: ${{ github.event.inputs.build_number }}
       # ENABLE_OBFUSCATION: ${{ github.event.inputs.enable_obfuscation }}
  
     steps:
       - name: build values
-        run: echo "Flavor is $FLAVOR, APP_NAME is $APP_NAME"
+        run: echo "Flavor is $FLAVOR, APP_NAME is $APP_DISPLAY_NAME"
 
       - name: Clone repository
         uses: actions/checkout@v4
