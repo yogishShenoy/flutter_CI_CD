@@ -41,7 +41,7 @@ jobs:
           echo "STORE_FILE=android/app/release.jks" >> $GITHUB_ENV
           
           # Optional: log success
-          echo "✅ Keystore file created at android/app/release.jks"
+          echo "✅ Keystore file created at $STORE_FILE"
 
       - name: build values
         run: echo "Flavor is $FLAVOR, APP_NAME is $APP_DISPLAY_NAME"

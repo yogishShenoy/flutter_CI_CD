@@ -14,7 +14,7 @@ val versionPropertiesFile = rootProject.file("version.properties")
 if (versionPropertiesFile.exists()) {
     versionProperties.load(versionPropertiesFile.inputStream())
 }else {
-    println("⚠️ version.properties NOT FOUND, release builds will fail.")
+    println("⚠️ version.properties NOT FOUND, Local release builds will fail.")
 }
 
 val keystoreProperties = Properties()
@@ -22,7 +22,7 @@ val keystorePropertiesFile = rootProject.file("app/keystore.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(keystorePropertiesFile.inputStream())
 } else {
-    println("⚠️ keystore.properties NOT FOUND, release builds will fail.")
+    println("⚠️ keystore.properties NOT FOUND, Local release builds will fail.")
 }
 
 fun propOrEnvVersion(key: String): String? {
