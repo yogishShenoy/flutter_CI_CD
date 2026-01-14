@@ -38,10 +38,6 @@ jobs:
       - name: STORE_FILE path
         run: echo "STORE_FILE is $STORE_FILE"
 
-      - name: Verify Keystore
-        run: |
-          keytool -list -v -keystore $STORE_FILE -storepass $KEYSTORE_PASSWORD
-
       - name: build values
         run: echo "Flavor is $FLAVOR, APP_NAME is $APP_DISPLAY_NAME"
 
