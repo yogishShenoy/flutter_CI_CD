@@ -13,12 +13,28 @@ val versionProperties = Properties()
 val versionPropertiesFile = rootProject.file("version.properties")
 if (versionPropertiesFile.exists()) {
     versionProperties.load(versionPropertiesFile.inputStream())
+}else {
+    println("⚠️ version.properties NOT FOUND, release builds will fail.")
 }
 
-fun propOrEnv(key: String): String? {
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("app/keystore.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(keystorePropertiesFile.inputStream())
+} else {
+    println("⚠️ keystore.properties NOT FOUND, release builds will fail.")
+}
+
+fun propOrEnvVersion(key: String): String? {
     return System.getenv(key)          // 1️⃣ check GitHub Actions env
         ?: project.findProperty(key)?.toString()  // 2️⃣ check gradle.properties / project property
         ?: versionProperties.getProperty(key)    // 3️⃣ check local version.properties
+}
+
+fun propOrEnvKeystore(key: String): String? {
+    return System.getenv(key)          // 1️⃣ check GitHub Actions env
+        ?: project.findProperty(key)?.toString()  // 2️⃣ check gradle.properties / project property
+        ?: keystoreProperties.getProperty(key)    // 3️⃣ check local keystore.properties
 }
 
 
@@ -57,28 +73,63 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = propOrEnv("ANDROID_APP_ID") ?: "com.example.learn01"
+        applicationId = propOrEnvVersion("ANDROID_APP_ID") ?: "com.example.learn01"
         logConfig("ANDROID_APP_ID", applicationId)
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = propOrEnv("APP_VERSION_CODE")?.toInt() ?: 1
-        versionName = propOrEnv("APP_VERSION_NAME") ?: "1.0.0"
+        versionCode = propOrEnvVersion("APP_VERSION_CODE")?.toInt() ?: 1
+        versionName = propOrEnvVersion("APP_VERSION_NAME") ?: "1.0.0"
         logConfig("APP_VERSION_CODE", versionCode)
         logConfig("APP_VERSION_NAME", versionName)
         multiDexEnabled = true
 
-        val appDisplayName = propOrEnv("APP_DISPLAY_NAME")
+        val appDisplayName = propOrEnvVersion("APP_DISPLAY_NAME")
         logConfig("APP_DISPLAY_NAME", appDisplayName)
         addResValueIfNotEmpty(this, "app_name", appDisplayName)
     }
 
+    flavorDimensions.add("env")
+
+    productFlavors {
+        create("dev") {
+            dimension = "env"
+        }
+        create("jioBpPulse") {
+            dimension = "env"
+        }
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = propOrEnvKeystore("STORE_FILE")?.let { file(it) }
+                //keystorePropertiesFile.takeIf { it.exists() }?.let { file(keystoreProperties["storeFile"] as String) }
+            storePassword = propOrEnvKeystore("KEYSTORE_PASSWORD")
+                //keystoreProperties["storePassword"] as? String
+            keyAlias = propOrEnvKeystore("KEY_ALIAS")
+                //keystoreProperties["keyAlias"] as? String
+            keyPassword = propOrEnvKeystore("KEY_PASSWORD")
+                //keystoreProperties["keyPassword"] as? String
+            println("🔐 Signing config:")
+            println("   storeFile = ${storeFile ?: "NOT SET"}")
+            println("   keyAlias = ${keyAlias ?: "NOT SET"}")
+        }
+    }
+
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+        getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
+        }
+
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }

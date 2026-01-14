@@ -71,6 +71,7 @@ pubspec.lock
 *.jks
 android/gradle/wrapper/gradle-wrapper.properties
 *.properties
+**/android/app/release/
 
 # iOS/XCode related
 **/ios/**/*.mode1v3

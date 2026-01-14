@@ -17,16 +17,32 @@ jobs:
   build:
     runs-on: macos-latest
     environment: ${{ github.event.inputs.flavor }}
-    env: 
-      # MY_APP_ID: ${{ vars.APP_ID }}
-      # MY_API_KEY: ${{ secrets.API_KEY }}
+    env:
       FLAVOR: ${{ github.event.inputs.flavor }}
       APP_DISPLAY_NAME: ${{ vars.APP_DISPLAY_NAME }}
       ANDROID_APP_ID: ${{ vars.ANDROID_APP_ID }}
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       # BUILD_NUMBER: ${{ github.event.inputs.build_number }}
       # ENABLE_OBFUSCATION: ${{ github.event.inputs.enable_obfuscation }}
  
     steps:
+      - name: Create cicd.jks from secret
+        run: |
+          # Make sure folder exists
+          mkdir -p android/app
+          
+          # Decode base64 secret into the keystore file
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release.jks
+          
+          # Export path so Gradle can use it
+          echo "STORE_FILE=android/app/release.jks" >> $GITHUB_ENV
+          
+          # Optional: log success
+          echo "✅ Keystore file created at android/app/release.jks"
+
       - name: build values
         run: echo "Flavor is $FLAVOR, APP_NAME is $APP_DISPLAY_NAME"
 
