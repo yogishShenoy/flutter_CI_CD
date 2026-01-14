@@ -29,7 +29,7 @@ jobs:
       # ENABLE_OBFUSCATION: ${{ github.event.inputs.enable_obfuscation }}
  
     steps:
-      - name: Create cicd.jks from secret
+      - name: Create release.jks from secret
         run: |
           # Make sure folder exists
           mkdir -p android/app
@@ -42,6 +42,9 @@ jobs:
           
           # Optional: log success
           echo "✅ Keystore file created at $STORE_FILE"
+
+      - name: STORE_FILE path
+        run: echo "STORE_FILE is $STORE_FILE"
 
       - name: build values
         run: echo "Flavor is $FLAVOR, APP_NAME is $APP_DISPLAY_NAME"
