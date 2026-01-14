@@ -31,20 +31,16 @@ jobs:
     steps:
       - name: Create release.jks from secret
         run: |
-          # Make sure folder exists
           mkdir -p android/app
-          
-          # Decode base64 secret into the keystore file
           echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release.jks
-          
-          # Export path so Gradle can use it
-          echo "STORE_FILE=android/app/release.jks" >> $GITHUB_ENV
-          
-          # Optional: log success
-          echo "✅ Keystore file created at $STORE_FILE"
+          echo "STORE_FILE=release.jks" >> $GITHUB_ENV
 
       - name: STORE_FILE path
         run: echo "STORE_FILE is $STORE_FILE"
+
+      - name: Verify Keystore
+        run: |
+          keytool -list -v -keystore $STORE_FILE -storepass $KEYSTORE_PASSWORD
 
       - name: build values
         run: echo "Flavor is $FLAVOR, APP_NAME is $APP_DISPLAY_NAME"
