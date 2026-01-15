@@ -38,6 +38,10 @@ jobs:
       - name: STORE_FILE path
         run: echo "STORE_FILE is $STORE_FILE"
 
+      - name: Verify keystore file exists
+        run: |
+          ls -lh android/app/release.jks
+
       - name: build values
         run: echo "Flavor is $FLAVOR, APP_NAME is $APP_DISPLAY_NAME"
 

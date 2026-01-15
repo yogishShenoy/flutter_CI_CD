@@ -104,7 +104,7 @@ android {
     signingConfigs {
         create("release") {
             storeFile = propOrEnvKeystore("STORE_FILE")?.let {
-                rootProject.file("app/$it")
+                file(it)
             }
                 //keystorePropertiesFile.takeIf { it.exists() }?.let { file(keystoreProperties["storeFile"] as String) }
             storePassword = propOrEnvKeystore("KEYSTORE_PASSWORD")
