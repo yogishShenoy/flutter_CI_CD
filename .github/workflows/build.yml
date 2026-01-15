@@ -64,7 +64,7 @@ jobs:
       # - name: Analyze project source
       #   run: dart analyze
       - name: Build APK
-        run: flutter build apk --flavor FLAVOR --release
+        run: flutter build apk --flavor $FLAVOR --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
