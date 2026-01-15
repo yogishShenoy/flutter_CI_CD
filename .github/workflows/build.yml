@@ -29,6 +29,9 @@ jobs:
       # ENABLE_OBFUSCATION: ${{ github.event.inputs.enable_obfuscation }}
  
     steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
       - name: Create release.jks from secret
         run: |
           mkdir -p android/app
@@ -44,9 +47,6 @@ jobs:
 
       - name: build values
         run: echo "Flavor is $FLAVOR, APP_NAME is $APP_DISPLAY_NAME"
-
-      - name: Clone repository
-        uses: actions/checkout@v4
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
