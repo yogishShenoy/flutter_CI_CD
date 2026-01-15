@@ -69,6 +69,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release-apk
+          name: app-release-apk --flavor FLAVOR --release
           path: build/app/outputs/flutter-apk/app-release.apk
       # - run: flutter build appbundle
