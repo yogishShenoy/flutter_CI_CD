@@ -78,7 +78,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 34
         versionCode = propOrEnvVersion("APP_VERSION_CODE")?.toInt() ?: 1
         versionName = propOrEnvVersion("APP_VERSION_NAME") ?: "1.0.0"
         logConfig("APP_VERSION_CODE", versionCode)
