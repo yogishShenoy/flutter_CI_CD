@@ -19,7 +19,7 @@ jobs:
     environment: ${{ github.event.inputs.flavor }}
     env:
       FLAVOR: ${{ github.event.inputs.flavor }}
-      APK_PATH: build/app/outputs/flutter-apk/app-${{ env.FLAVOR }}-release.apk
+      APK_PATH: build/app/outputs/flutter-apk/app-${{ github.event.inputs.flavor }}-release.apk
       APP_DISPLAY_NAME: ${{ vars.APP_DISPLAY_NAME }}
       ANDROID_APP_ID: ${{ vars.ANDROID_APP_ID }}
       ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
