@@ -19,12 +19,15 @@ jobs:
     environment: ${{ github.event.inputs.flavor }}
     env:
       FLAVOR: ${{ github.event.inputs.flavor }}
+      APK_PATH: build/app/outputs/flutter-apk/app-${{ env.FLAVOR }}-release.apk
       APP_DISPLAY_NAME: ${{ vars.APP_DISPLAY_NAME }}
       ANDROID_APP_ID: ${{ vars.ANDROID_APP_ID }}
       ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
       KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+      FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
       # BUILD_NUMBER: ${{ github.event.inputs.build_number }}
       # ENABLE_OBFUSCATION: ${{ github.event.inputs.enable_obfuscation }}
  
@@ -66,9 +69,22 @@ jobs:
       - name: Build APK
         run: flutter build apk --flavor $FLAVOR --release
 
-      - name: Upload APK
+      - name: Upload APK to Git Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
-          path: build/app/outputs/flutter-apk/*.apk
+          path: $APK_PATH
       # - run: flutter build appbundle
+
+      - name: Upload APK to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+            appId: $FIREBASE_APP_ID
+            serviceCredentialsFileContent: $FIREBASE_SERVICE_ACCOUNT
+            groups: cicd-test-group
+            file: $APK_PATH
+            releaseNotes: |
+              🚀 New Release Build
+              - Bug fixes
+              - Performance improvements
+              - Updated UI changes

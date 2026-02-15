@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ChatScreen(),
-    );
+    return const MaterialApp(home: ChatScreen());
   }
 }
 
@@ -29,10 +31,16 @@ class _ChatScreenState extends State<ChatScreen> {
   );
   final List<String> _messages = [];
 
+  String appName = '';
+  String packageName = '';
+  String version = '';
+  String buildNumber = '';
+
   @override
   void initState() {
     super.initState();
-    _channel.ready.then((data){
+    _setAppDetail();
+    _channel.ready.then((data) {
       print("i am ready");
     });
     _channel.stream.listen((message) {
@@ -43,15 +51,27 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  Future<void> _setAppDetail() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appName = packageInfo.appName;
+    packageName = packageInfo.packageName;
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('WebSocket Chat'),
         actions: [
-          IconButton.filledTonal(onPressed: (){
-            _channel.sink.close(status.goingAway);
-          }, icon: Icon(Icons.pause))
+          IconButton.filledTonal(
+            onPressed: () {
+              _channel.sink.close(status.goingAway);
+            },
+            icon: Icon(Icons.pause),
+          ),
         ],
       ),
       body: Padding(
@@ -59,6 +79,10 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text("appName: $appName"),
+            Text("packageName: $packageName"),
+            Text("version: $version"),
+            Text("buildNumber: $buildNumber"),
             Form(
               child: TextFormField(
                 controller: _controller,
@@ -73,7 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   return Text(_messages[index]);
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
