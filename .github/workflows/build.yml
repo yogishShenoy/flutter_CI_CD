@@ -88,7 +88,7 @@ jobs:
             appId: ${{ secrets.FIREBASE_APP_ID }}
             serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
             groups: cicd-test-group
-            file: build/app/outputs/**/**/*.apk
+            file: build/app/outputs/flutter-apk/app-dev-release.apk
             releaseNotes: |
               🚀 New Release Build
               - Bug fixes
