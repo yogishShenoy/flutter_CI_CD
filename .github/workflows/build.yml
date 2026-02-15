@@ -27,6 +27,7 @@ jobs:
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+      GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
       FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
       # BUILD_NUMBER: ${{ github.event.inputs.build_number }}
       # ENABLE_OBFUSCATION: ${{ github.event.inputs.enable_obfuscation }}
@@ -34,6 +35,11 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
+
+      - name: Create google-services.json for flavor $FLAVOR
+        run: |
+            mkdir -p android/app/src/$FLAVOR
+            echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > android/app/src/$FLAVOR/google-services.json
 
       - name: Create release.jks from secret
         run: |
