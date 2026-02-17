@@ -21,6 +21,14 @@ on:
         description: "App Version Code (1)"
         required: true
 
+      releaseNote:
+        description: "App Version Code (1)"
+        default: |
+          🚀 New Release Build
+          - Bug fixes
+          - Performance improvements
+          - Updated UI changes
+
 
 
 jobs:
@@ -31,6 +39,7 @@ jobs:
       FLAVOR: ${{ github.event.inputs.flavor }}
       APP_VERSION_NAME: ${{ github.event.inputs.appVersionName }}
       APP_VERSION_CODE: ${{ github.event.inputs.AppVersionCode }}
+      RELEASE_NOTE: ${{ github.event.inputs.releaseNote }}
       APK_PATH: build/app/outputs/flutter-apk/app-${{ github.event.inputs.flavor }}-release.apk
       APP_DISPLAY_NAME: ${{ vars.APP_DISPLAY_NAME }}
       ANDROID_APP_ID: ${{ vars.ANDROID_APP_ID }}
@@ -101,8 +110,4 @@ jobs:
           serviceCredentialsFileContent: ${{ env.FIREBASE_SERVICE_ACCOUNT }}
           groups: cicd-test-group
           file: ${{ env.APK_PATH }}
-          releaseNotes: |
-            🚀 New Release Build
-            - Bug fixes
-            - Performance improvements
-            - Updated UI changes
+          releaseNotes: ${{env.RELEASE_NOTE}}
