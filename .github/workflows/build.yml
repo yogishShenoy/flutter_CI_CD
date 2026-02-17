@@ -23,6 +23,8 @@ on:
 
       releaseNote:
         description: "App Version Code (1)"
+        required: false
+        type: string
         default: |
           🚀 New Release Build
           - Bug fixes
