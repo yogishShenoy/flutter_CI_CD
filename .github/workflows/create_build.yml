@@ -74,3 +74,6 @@ jobs:
 
       - name: Upload APK to Git Artifacts
         uses: ./.github/actions/upload-apk-git-artifacts-setup
+
+      - name: Upload APK to Firebase App Distribution
+        uses: ./.github/actions/upload-apk-firebase-setup
