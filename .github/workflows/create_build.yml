@@ -51,11 +51,11 @@ jobs:
     environment: ${{ github.event.inputs.flavor }}
 
     steps:
-      - name: Free up disk space on GitHub Actions runner
-        uses: ./.github/actions/free-up-disk-space-setup
-
       - name: Checkout code
         uses: actions/checkout@v6
+
+      - name: Free up disk space on GitHub Actions runner
+        uses: ./.github/actions/free-up-disk-space-setup
 
       - name: Setup Google-service.json
         uses: ./.github/actions/google-service-setup
