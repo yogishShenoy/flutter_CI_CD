@@ -71,3 +71,6 @@ jobs:
 
       - name: Build APK
         run: flutter build apk --flavor $FLAVOR --release
+
+      - name: Upload APK to Git Artifacts
+        uses: ./.github/actions/upload-apk-git-artifacts-setup
