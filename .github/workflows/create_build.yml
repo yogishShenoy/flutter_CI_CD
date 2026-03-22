@@ -1,0 +1,72 @@
+name: Create Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: "Select build flavor"
+        required: true
+        type: environment
+
+      appVersionName:
+        description: "App Version Name (1.0.0)"
+        required: true
+
+      AppVersionCode:
+        description: "App Version Code (1)"
+        required: true
+
+      releaseNote:
+        description: "App Version Code (1)"
+        required: false
+        type: string
+        default: |
+          🚀 New Release Build
+          - Bug fixes
+          - Performance improvements
+          - Updated UI changes
+
+env:
+  FLAVOR: ${{ github.event.inputs.flavor }}
+  APP_VERSION_NAME: ${{ github.event.inputs.appVersionName }}
+  APP_VERSION_CODE: ${{ github.event.inputs.AppVersionCode }}
+  RELEASE_NOTE: ${{ github.event.inputs.releaseNote }}
+  APK_PATH: build/app/outputs/flutter-apk/app-${{ github.event.inputs.flavor }}-release.apk
+  APP_DISPLAY_NAME: ${{ vars.APP_DISPLAY_NAME }}
+  ANDROID_APP_ID: ${{ vars.ANDROID_APP_ID }}
+  ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+  KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+  KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+  KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+  FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+  GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+  FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+  # BUILD_NUMBER: ${{ github.event.inputs.build_number }}
+  # ENABLE_OBFUSCATION: ${{ github.event.inputs.enable_obfuscation }
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    environment: ${{ github.event.inputs.flavor }}
+
+    steps:
+      - name: Free up disk space on GitHub Actions runner
+        run: |
+          df -h
+          sudo apt-get clean
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          sudo rm -rf ~/.cache
+          df -h
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Google-service.json
+        uses: ./.github/actions/google-service-setup
+
+      - name: Setup Android Keystore
+        uses: ./.github/actions/keystore-setup
