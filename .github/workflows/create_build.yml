@@ -62,3 +62,9 @@ jobs:
 
       - name: Setup Android Keystore
         uses: ./.github/actions/keystore-setup
+
+      - name: Install Flutter
+        uses: ./.github/actions/install-flutter-setup
+
+      - name: Pug get flutter dependencies
+        run: flutter pub get

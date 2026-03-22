@@ -1,0 +1,17 @@
+name: Install Fluter Setup
+description: Sets up the flutter
+
+runs:
+  using: composite
+  steps:
+    - name: Install Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version-file: pubspec.yaml
+        cache: true
+
+    - name: Check Flutter version
+      shell: bash
+      run: |
+        flutter --version
+        dart --version
