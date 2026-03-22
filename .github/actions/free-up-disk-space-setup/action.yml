@@ -1,0 +1,17 @@
+name: Free up disk space setup
+description: Free up disk space on GitHub Actions runner
+
+runs:
+  using: composite
+  steps:
+    - name: Free up disk space on GitHub Actions runner
+      shell: bash
+      run: |
+        df -h
+          sudo apt-get clean
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          sudo rm -rf ~/.cache
+          df -h

@@ -52,18 +52,10 @@ jobs:
 
     steps:
       - name: Free up disk space on GitHub Actions runner
-        run: |
-          df -h
-          sudo apt-get clean
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /usr/local/share/boost
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-          sudo rm -rf ~/.cache
-          df -h
+        uses: ./.github/actions/free-up-disk-space-setup
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Google-service.json
         uses: ./.github/actions/google-service-setup

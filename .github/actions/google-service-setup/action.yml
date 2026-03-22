@@ -4,7 +4,6 @@ description: Sets up the google-services.json based on the flavor
 runs:
   using: composite
   steps:
-    # Decode the base64 keystore and save it as a file
     - name: Create google-services.json for flavor $FLAVOR
       shell: bash
       run: |
