@@ -1,0 +1,14 @@
+name: Upload APK to Firebase App Distribution setup
+description: Upload APK to Firebase App Distribution
+
+runs:
+  using: composite
+  steps:
+    - name: Upload APK to Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
+      with:
+        appId: ${{ env.FIREBASE_APP_ID }}
+        serviceCredentialsFileContent: ${{ env.FIREBASE_SERVICE_ACCOUNT }}
+        groups: cicd-test-group
+        file: ${{ env.APK_PATH }}
+        releaseNotes: ${{env.RELEASE_NOTE}}
