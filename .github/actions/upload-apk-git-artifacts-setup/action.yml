@@ -1,0 +1,11 @@
+name: Upload APK to Git Artifacts Setup
+description: Upload APK to Git Artifacts
+
+runs:
+  using: composite
+  steps:
+    - name: Upload APK to Git Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-release-apk
+        path: ${{ env.APK_PATH }}
